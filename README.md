@@ -34,7 +34,7 @@ git clone https://github.com/better-futures-studio/feature-demo-video.git ~/.loc
 ~/.local/share/feature-demo-video/install.sh
 ```
 
-That links the skill into `~/.claude/skills` and `~/.agents/skills` (where Codex looks). Pass `--claude` or `--codex` for just one. Pick either the plugin or the script for Claude Code, not both. To update, `git pull` in the clone.
+That links the skill into `~/.claude/skills` and `~/.codex/skills` (or `$CODEX_HOME/skills`). Pass `--claude` or `--codex` for just one. Pick either the plugin or the script for Claude Code, not both. To update, `git pull` in the clone.
 
 ### Voice model (once per Mac)
 
