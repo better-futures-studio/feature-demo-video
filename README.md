@@ -7,7 +7,7 @@ The voice is cloned locally with Qwen3-TTS (free, nothing leaves your machine). 
 ## Requirements
 
 - macOS on Apple Silicon (the voice model runs on MLX)
-- Node 22+, Python 3, `ffmpeg`, `uv`: `brew install ffmpeg uv`
+- Node 22+, Python 3, `ffmpeg`, `uv`: `brew install ffmpeg uv` (on a fresh Mac, `python3` first prompts to install the Xcode Command Line Tools)
 - [agent-browser](https://www.npmjs.com/package/agent-browser) 0.38+: `npm i -g agent-browser && agent-browser install`
 - Optional: Tailscale, to watch videos on your phone
 
@@ -39,7 +39,7 @@ That links the skill into `~/.claude/skills` and `~/.codex/skills` (or `$CODEX_H
 ### Voice model (once per Mac)
 
 ```bash
-~/.local/share/feature-demo-video/skills/feature-demo-video/scripts/setup-local-voice.sh
+bash ~/.local/share/feature-demo-video/skills/feature-demo-video/scripts/setup-local-voice.sh
 ```
 
 It makes a Python environment under `~/.cache/feature-demo-video` and downloads about 5 GB of models. If you installed the plugin, ask the agent to run this; it knows where the skill lives.

@@ -88,7 +88,7 @@ const jobs = lines.filter((line) => !keep(line)).map((line) => ({ id: line.id, t
 
 if (jobs.length > 0) {
     // One model load for every line; progress goes to the terminal as each clip lands. On a failure,
-    // lines.json is left as it was, so a rerun redoes only the lines that didn't finish.
+    // lines.json is left as it was, so a rerun voices this whole batch again.
     try {
         withEnv(`exec "$FDV_VENV/bin/python" "${SCRIPTS}/voice_clone.py"`, {
             input: JSON.stringify(jobs),
