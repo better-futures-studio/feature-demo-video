@@ -2,7 +2,12 @@
 // beats. One beat per line in script.json, in order; each beat lasts as long as its voice line.
 // See examples/catch-up/driver.mjs for a complete, working take.
 // usage: DEMO_LIB=<skill>/scripts/lib.mjs TAKE=$DEMO_DIR/take THEME=light node driver.mjs
-const lib = await import(process.env.DEMO_LIB ?? new URL('../scripts/lib.mjs', import.meta.url).href);
+// The copy lives outside the skill, so it can't find lib.mjs on its own.
+if (!process.env.DEMO_LIB) {
+    throw new Error('Set DEMO_LIB=<skill>/scripts/lib.mjs');
+}
+
+const lib = await import(process.env.DEMO_LIB);
 const { ab, sleep, centerOf, moveTo, click, swipe, holdTouchEmulation, waitFor, waitForText } = lib;
 const { DEMO_DIR, createTake, freshBrowser, openAt, readUrls, showFinger } = lib;
 
