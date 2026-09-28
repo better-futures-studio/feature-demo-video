@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# agent-browser on the demo session, for poking at a take by hand: scripts/ab snapshot, scripts/ab eval ...
+# A wrapper, because zsh does not word-split AB="agent-browser --session x" when you run $AB.
+exec agent-browser --session "${DEMO_SESSION:-feature-demo}" "$@"

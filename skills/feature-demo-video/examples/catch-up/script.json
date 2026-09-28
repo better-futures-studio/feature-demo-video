@@ -1,0 +1,72 @@
+[
+ {
+  "id": "A",
+  "style": "",
+  "text": "Hey everyone. So, um, I want to show you the new catch-up feature. The idea is simple: owners are busy, and things pile up. Catch up gives them one private link where they can knock it all out from their phone."
+ },
+ {
+  "id": "A2",
+  "style": "",
+  "text": "We don't send it automatically yet, but the idea is we'd send it to owners over WhatsApp, SMS, or email whenever something needs their attention. Reviews are first, and we can add other things later."
+ },
+ {
+  "id": "B",
+  "style": "",
+  "text": "Each card is a review that still needs a reply. The draft comes from our reply drafter, so it's already in their voice, and long reviews collapse, so you can expand them."
+ },
+ {
+  "id": "C",
+  "style": "",
+  "text": "Swiping right posts the reply. The first time, it asks you to confirm, since it goes out publicly on Google."
+ },
+ {
+  "id": "D",
+  "style": "",
+  "text": "Then you get a six second undo window before we actually send it."
+ },
+ {
+  "id": "E",
+  "style": "",
+  "text": "Edit opens the reply, so they can tweak it before it goes out."
+ },
+ {
+  "id": "F",
+  "style": "",
+  "text": "Swipe left to skip. Skipped cards come back the next time they open the link."
+ },
+ {
+  "id": "G",
+  "style": "",
+  "text": "Or they can just tap post. <short pause> And when they're done, they get a quick summary."
+ },
+ {
+  "id": "H",
+  "style": "",
+  "text": "Links last seven days, and sending a new one turns off the old one."
+ },
+ {
+  "id": "I",
+  "style": "",
+  "text": "So if they open an old link, they land here. One tap, and we email them a fresh one."
+ },
+ {
+  "id": "I2",
+  "style": "",
+  "text": "That's the email they get. Tap it, and they're right back in."
+ },
+ {
+  "id": "K",
+  "style": "",
+  "text": "And on desktop, owners who are already signed in can open it right from the reviews page. No link needed."
+ },
+ {
+  "id": "L",
+  "style": "",
+  "text": "The main difference is keyboard shortcuts. E opens the editor as a dialog, the right arrow posts, Z undoes it, and the left arrow skips."
+ },
+ {
+  "id": "J",
+  "style": "",
+  "text": "That's it, let me know what you think."
+ }
+]

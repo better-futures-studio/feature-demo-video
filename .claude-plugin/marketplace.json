@@ -1,0 +1,11 @@
+{
+  "name": "better-futures-studio",
+  "owner": { "name": "Better Futures Studio" },
+  "plugins": [
+    {
+      "name": "feature-demo-video",
+      "source": "./",
+      "description": "Record casual team demo videos of a local web app with a locally cloned voiceover."
+    }
+  ]
+}
