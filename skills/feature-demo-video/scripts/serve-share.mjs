@@ -22,11 +22,15 @@ if (!process.argv[2] || !fs.existsSync(root)) {
 let host;
 let dnsName = '';
 
-try {
-    host = execFileSync('tailscale', ['ip', '-4'], { encoding: 'utf8' }).trim().split('\n')[0];
-    dnsName = (JSON.parse(execFileSync('tailscale', ['status', '--json'], { encoding: 'utf8' })).Self?.DNSName ?? '').replace(/\.$/, '');
-} catch {
-    /* no Tailscale status; handled below */
+// The Tailscale app for Mac doesn't put its CLI on PATH unless you turn that on, so try the app's own copy too.
+for (const cli of ['tailscale', '/Applications/Tailscale.app/Contents/MacOS/Tailscale']) {
+    try {
+        host = execFileSync(cli, ['ip', '-4'], { encoding: 'utf8' }).trim().split('\n')[0];
+        dnsName = (JSON.parse(execFileSync(cli, ['status', '--json'], { encoding: 'utf8' })).Self?.DNSName ?? '').replace(/\.$/, '');
+        break;
+    } catch {
+        /* not this CLI, or Tailscale isn't running; try the next one */
+    }
 }
 
 if (!host) {
