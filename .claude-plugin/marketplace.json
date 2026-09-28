@@ -1,6 +1,11 @@
 {
   "name": "better-futures-studio",
-  "owner": { "name": "Better Futures Studio" },
+  "owner": {
+    "name": "Better Futures Studio"
+  },
+  "metadata": {
+    "description": "Better Futures Studio skills for Claude Code."
+  },
   "plugins": [
     {
       "name": "feature-demo-video",

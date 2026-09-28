@@ -57,3 +57,7 @@ In your project, ask the agent something like "record a demo video of the new ex
 Ask the agent to "clone my voice for demos". Record 15–30 seconds of yourself talking at your normal demo pace (iPhone Voice Memos in a quiet room is fine) and give it the file. It trims the clip, transcribes it locally, and asks you to check the transcript. The sample is kept in `~/.config/feature-demo-video/voice/` on your Mac only. Delete that folder to go back to the default voice.
 
 Only clone your own voice. Never commit a voice sample or share one: anyone holding it can make speech in your voice.
+
+## License
+
+MIT. The voice models download at setup under their own licences (Qwen3-TTS: Apache-2.0, parakeet-tdt: CC-BY-4.0).
