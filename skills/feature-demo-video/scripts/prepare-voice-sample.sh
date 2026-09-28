@@ -15,13 +15,16 @@ fi
 
 mkdir -p "$VOICE_SAMPLE_DIR"
 chmod 700 "$VOICE_SAMPLE_DIR"
+# The new audio and transcript are built under temporary names and moved into place together, only once
+# both are good: a failed run keeps the previous sample whole instead of pairing new audio with an old
+# transcript, and an empty transcript never replaces a real one.
+audio="$VOICE_SAMPLE_DIR/sample.new.wav"
+transcript="$VOICE_SAMPLE_DIR/sample.new.txt"
+trap 'rm -f "$audio" "$transcript"' EXIT
+
 ffmpeg -nostdin -v error -y -i "$1" -ac 1 -ar 24000 \
     -af "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.15,areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.25,areverse,loudnorm=I=-18:TP=-2" \
-    "$VOICE_SAMPLE_DIR/sample.wav"
-
-# The transcript is written to a temporary file and moved into place only when it has text: an empty
-# sample.txt would make voice-local.mjs clone with no transcript.
-transcript="$VOICE_SAMPLE_DIR/sample.txt.tmp"
+    "$audio"
 
 if [ $# -ge 2 ]; then
     printf '%s\n' "$2" > "$transcript"
@@ -30,16 +33,16 @@ else
 import sys
 from mlx_audio.stt.utils import load_model
 print(load_model("mlx-community/parakeet-tdt-0.6b-v3").generate(sys.argv[1]).text.strip())
-' "$VOICE_SAMPLE_DIR/sample.wav" > "$transcript"
+' "$audio" > "$transcript"
     echo "Transcribed; check it and fix any wrong word: $VOICE_SAMPLE_DIR/sample.txt"
 fi
 
 if ! grep -q '[[:alnum:]]' "$transcript"; then
-    rm -f "$transcript" "$VOICE_SAMPLE_DIR/sample.wav"
     echo "No transcript; nothing was saved. Pass the exact words as the second argument." >&2
     exit 1
 fi
 
+mv "$audio" "$VOICE_SAMPLE_DIR/sample.wav"
 mv "$transcript" "$VOICE_SAMPLE_DIR/sample.txt"
 
 # The pace set for the previous sample stays with the voice; a new, quicker recording may not need it.
