@@ -142,7 +142,7 @@ export async function swipe(from, to, { duration = 420 } = {}) {
  * process lives; it only lasts as long as a CDP session holds it. Kill the child when the segment ends.
  */
 export function holdTouchEmulation() {
-    const child = spawn('node', [path.join(SCRIPTS_DIR, 'cdp.mjs'), 'touch', 'on'], { stdio: ['ignore', 'pipe', 'inherit'] });
+    const child = spawn(process.execPath, [path.join(SCRIPTS_DIR, 'cdp.mjs'), 'touch', 'on'], { stdio: ['ignore', 'pipe', 'inherit'] });
 
     return new Promise((resolve, reject) => {
         const timer = setTimeout(() => reject(new Error('touch emulation did not start')), 10000);
