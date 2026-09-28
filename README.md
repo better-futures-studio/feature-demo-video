@@ -13,8 +13,6 @@ The voice is cloned locally with Qwen3-TTS (free, nothing leaves your machine). 
 
 ## Install
 
-This repo is private, so your GitHub account needs access to `better-futures-studio`.
-
 ### Claude Code
 
 As a plugin (updates through `/plugin`):
@@ -29,7 +27,7 @@ Or as a plain skill, with the script below.
 ### Codex (and Claude Code without the plugin)
 
 ```bash
-git clone git@github.com:better-futures-studio/feature-demo-video.git ~/.local/share/feature-demo-video
+git clone https://github.com/better-futures-studio/feature-demo-video.git ~/.local/share/feature-demo-video
 ```
 
 ```bash
