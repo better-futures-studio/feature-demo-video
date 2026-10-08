@@ -1,13 +1,26 @@
 {
-    "default": "masry",
-    "male": {
-        "masry": "LXrTqFIgiubkrMkwvOUr",
-        "haytham": "IES4nrmZdUBHByLBde0P",
-        "hanafi": "DWMVT5WflKt0P8OPpIrY"
+    "egyptian": {
+        "default": "masry",
+        "male": {
+            "masry": "LXrTqFIgiubkrMkwvOUr",
+            "haytham": "IES4nrmZdUBHByLBde0P",
+            "hanafi": "DWMVT5WflKt0P8OPpIrY"
+        },
+        "female": {
+            "yasmine": "L10lEremDiJfPicq5CPh",
+            "fatima": "I3u6waC588j43py1kDN2",
+            "nadia": "80le32Uz2DfWFo4Foz0p"
+        }
     },
-    "female": {
-        "yasmine": "L10lEremDiJfPicq5CPh",
-        "fatima": "I3u6waC588j43py1kDN2",
-        "nadia": "80le32Uz2DfWFo4Foz0p"
+    "saudi": {
+        "default": "hasawi",
+        "male": {
+            "hasawi": "kr4VZw8MSZMHE0y2m40n",
+            "fahad": "rpGHcNQJvO8dFNNFNj1v",
+            "ziyad": "pNGUEZc2WLum9bjP611g"
+        },
+        "female": {
+            "hana": "kdUY91gH5xyDHapxlthT"
+        }
     }
 }

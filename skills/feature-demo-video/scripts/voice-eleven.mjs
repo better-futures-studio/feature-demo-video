@@ -5,7 +5,7 @@
 // text: "[excited] Look at this! [laughs] I love it." (<tag> is accepted too and sent as [tag]).
 // `style` in script.json is ignored. v3 drifts a bit between clips, so re-take single lines with REGEN.
 // env: ELEVENLABS_API_KEY (required; or put ELEVENLABS_API_KEY=... in ~/.config/feature-demo-video/elevenlabs.env,
-// mode 600), ELEVENLABS_VOICE (a name from assets/eleven-voices.json, Egyptian voices grouped male/female; default masry; ELEVENLABS_VOICE_ID takes a raw id, e.g. one from your Voice Library), ELEVENLABS_MODEL (default eleven_v3; eleven_multilingual_v2 has no tags),
+// mode 600), ELEVENLABS_VOICE (a name from assets/eleven-voices.json, grouped by dialect (egyptian, saudi) and gender; the user picks it. ELEVENLABS_DIALECT=egyptian|saudi uses that dialect's default (masry, hasawi) when no voice is named; ELEVENLABS_VOICE_ID takes a raw id, e.g. one from your Voice Library), ELEVENLABS_MODEL (default eleven_v3; eleven_multilingual_v2 has no tags),
 // ELEVENLABS_LANG (optional ISO code; default ar), TEMPO (default 1), STABILITY (v3 only takes 0, 0.5 or 1: Creative/Natural/Robust; default 0.5), REGEN=all|A,B.
 // usage: node voice-eleven.mjs <take-dir>
 import { execFileSync } from 'node:child_process';
@@ -20,9 +20,11 @@ const envFile = path.join(process.env.HOME, '.config/feature-demo-video/elevenla
 const fileKey = fs.existsSync(envFile) && fs.readFileSync(envFile, 'utf8').match(/^ELEVENLABS_API_KEY=(.+)$/m)?.[1].trim();
 const key = process.env.ELEVENLABS_API_KEY ?? fileKey;
 const catalog = readJson(path.join(path.dirname(fileURLToPath(import.meta.url)), '../assets/eleven-voices.json'));
-const { default: fallback, ...groups } = catalog;
-const names = Object.fromEntries(Object.values(groups).flatMap(Object.entries));
-const voiceId = process.env.ELEVENLABS_VOICE_ID ?? names[(process.env.ELEVENLABS_VOICE ?? fallback).toLowerCase()];
+const voices = ({ default: _, ...genders }) => Object.values(genders).flatMap(Object.entries);
+const names = Object.fromEntries(Object.values(catalog).flatMap(voices));
+// ELEVENLABS_DIALECT=saudi|egyptian without a voice picks that dialect's default; with neither, the user must choose.
+const pick = process.env.ELEVENLABS_VOICE ?? catalog[process.env.ELEVENLABS_DIALECT?.toLowerCase()]?.default;
+const voiceId = process.env.ELEVENLABS_VOICE_ID ?? names[pick?.toLowerCase()];
 const model = process.env.ELEVENLABS_MODEL ?? 'eleven_v3';
 const lang = process.env.ELEVENLABS_LANG ?? 'ar';
 const tempo = Number(process.env.TEMPO ?? 1);
@@ -30,7 +32,7 @@ const stability = Number(process.env.STABILITY ?? 0.5);
 
 if (!process.argv[2] || !key || !voiceId) {
     console.error('usage: ELEVENLABS_VOICE=<name> node voice-eleven.mjs <take-dir>   (key in env or ' + envFile + ')');
-    console.error(Object.entries(groups).map(([group, v]) => `${group}: ${Object.keys(v).join(', ')}`).join('\n'));
+    console.error(Object.entries(catalog).map(([dialect, { default: d, ...g }]) => `${dialect} (default ${d}): ` + Object.entries(g).map(([gender, v]) => `${gender} ${Object.keys(v).join(', ')}`).join('; ')).join('\n'));
     if (!key) console.error('No ELEVENLABS_API_KEY found.');
     process.exit(64);
 }
