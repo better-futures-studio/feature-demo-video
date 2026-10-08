@@ -6,7 +6,7 @@ export const readJson = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
 export const writeJson = (file, value) => fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n');
 
 /** Spoken words in a line; <tags> don't count. */
-export const words = (text) => text.replace(/<[^>]+>/g, ' ').split(/\s+/).filter((s) => /[a-z0-9]/i.test(s)).length;
+export const words = (text) => text.replace(/<[^>]+>/g, ' ').split(/\s+/).filter((s) => /[\p{L}\p{N}]/u.test(s)).length;
 export const wpm = (text, seconds) => (words(text) / seconds) * 60;
 
 export const duration = (file) => parseFloat(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file]).toString());

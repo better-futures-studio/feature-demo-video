@@ -73,6 +73,11 @@ const dir = path.resolve(process.argv[2]);
 const vo = path.join(dir, 'vo');
 fs.mkdirSync(vo, { recursive: true });
 const lines = readJson(path.join(dir, 'script.json'));
+
+if (lines.some((l) => /\p{Script=Arabic}/u.test(l.text))) {
+    console.error('script.json has Arabic, which Qwen reads badly. Use voice-eleven.mjs for Arabic narration.');
+    process.exit(64);
+}
 const previous = fs.existsSync(path.join(vo, 'lines.json')) ? readJson(path.join(vo, 'lines.json')) : [];
 const regen = new Set((process.env.REGEN ?? '').split(',').filter(Boolean));
 const spoken = (text) => text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
