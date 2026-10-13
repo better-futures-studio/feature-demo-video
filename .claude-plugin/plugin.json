@@ -1,6 +1,6 @@
 {
   "name": "feature-demo-video",
-  "description": "Record casual team demo videos of a local web app with a locally cloned voiceover.",
+  "description": "Record casual team demo videos of a local web app or iOS simulator app with a locally cloned voiceover.",
   "version": "1.2.0",
   "author": {
     "name": "Better Futures Studio"

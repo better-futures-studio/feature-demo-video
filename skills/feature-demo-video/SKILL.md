@@ -5,7 +5,7 @@ description: Record a casual "developer shows the team a feature" demo video of 
 
 # Feature demo videos
 
-A developer showing their team a feature they just built: the real app, driven like a person would drive it, with a casual first-person voice over it. Everything runs on this machine: plan → isolated app → voice → record each segment with agent-browser → compose with ffmpeg → share.
+A developer showing their team a feature they just built: the real app, driven like a person would drive it, with a casual first-person voice over it. Everything runs on this machine: plan → isolated app → voice → record each segment (agent-browser for web apps, the iOS simulator for native apps) → compose with ffmpeg → share.
 
 Read `references/learnings.md` before planning; it holds the style decisions and every trap the first demos hit. For a native mobile app, also read `references/native-apps.md`: it replaces the browser driving and composing steps with simulator ones. Read `references/voices.md` before generating voice. `examples/catch-up/` is a complete worked example from another app; read it as a pattern.
 

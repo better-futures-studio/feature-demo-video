@@ -5,14 +5,14 @@ How to demo a native app the same way as a web app: the real app, driven at a hu
 ## Tools
 
 - **Simulators:** Xcode's `xcrun simctl`. Create the device sizes you need (`xcrun simctl create "Demo iPhone SE" com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation <runtime>`); `xcrun simctl list devicetypes` and `list runtimes` show what's available.
-- **Taps, typing, element lookup:** [AXe](https://github.com/cameroncooke/AXe) (`brew install cameroncooke/axe/axe`). `axe describe-ui` lists accessibility labels and frames, and `axe tap --label …` taps an element.
+- **Taps, typing, element lookup:** [AXe](https://github.com/cameroncooke/AXe) (`brew install cameroncooke/axe/axe`). Every AXe command needs `--udid <udid>` (`xcrun simctl list devices booted` shows it). `axe describe-ui --udid <udid>` lists accessibility labels and frames, and `axe tap --label … --udid <udid>` taps an element.
 - **Recording:** `axe record-video` (see Recording).
 - `ffmpeg` and Python with Pillow, for composing.
 
 ## Driving the app with AXe
 
 - **Use `--tap-style physical` for every tap.** The default style reported success but didn't trigger SwiftUI buttons: the app looked broken when it wasn't. Before you call a button dead, retry it with `physical`.
-- **Wait for elements, don't sleep:** `axe tap --label "Allow While Using App" --wait-timeout 20 …`. System alerts (location, camera, notifications) appear seconds after launch, sometimes later than you expect.
+- **Wait for elements, don't sleep:** `axe tap --label "Allow While Using App" --wait-timeout 20 --tap-style physical --udid <udid>`. System alerts (location, camera, notifications) appear seconds after launch, sometimes later than you expect.
 - **Tap by label, not coordinates.** Labels survive layout changes. When two elements share a label (a button and its text), add `--element-type Button`.
 - **Keep one simulator booted while driving.** With two booted, AXe failed with "Timed out creating the simulator remote automation session". Shut the other down, and reboot a simulator if AXe stops seeing it.
 - **Landscape-only apps on iPad:** AXe's frames were in landscape points, but no tap mapping (landscape or rotated) hit the target. Show those screens with the preview harness (below), or drive a portrait device.
@@ -37,7 +37,7 @@ How to demo a native app the same way as a web app: the real app, driven at a hu
   3. In the proxy, rewrite absolute `http://127.0.0.1:<port>` URLs in JSON responses to the proxy's `https://` address, both plain and JSON-escaped (`http:\/\/`): the server builds URLs from its own address, and the app then calls them over HTTP.
   4. Set the `Host` header to the backend's own address, so signed URLs (temporary file links) still validate.
 - **Release-looking builds:** debug-only controls (`#if DEBUG` buttons) don't belong in the video and change the layout. Build with the compilation conditions the release build uses (`SWIFT_ACTIVE_COMPILATION_CONDITIONS=STAGING` or similar), with every URL key pointed at the demo server.
-- **Analytics and crash reporting SDKs report from simulators.** Set their keys to dummy values on the build command line (for example `POSTHOG_API_KEY=… SENTRY_DSN=…`) so no event leaves the machine.
+- **Analytics and crash reporting SDKs report from simulators, and a dummy key doesn't stop them.** The SDK still sends each event, with device and session details, to its cloud host, which rejects it only after receiving it. Switch the SDKs off in demo builds: a build setting or compilation condition the app checks before initializing them, or point their host at a local mock that accepts and drops everything. Confirm in the proxy or a network log that nothing goes to their hosts. If the app can't do either without a code change, tell the user before recording.
 
 ## Screens you can't reach safely
 
@@ -49,11 +49,11 @@ Some screens sit behind a real third party you can't call: a card reader payment
 
 ## Recording
 
-- **Use `axe record-video --fps 15 --scale 0.6 --output raw.mp4`** (stop it with SIGINT). Its timestamps follow the wall clock.
+- **Use `axe record-video --udid <udid> --fps 15 --scale 0.6 --output raw.mp4`** (stop it with SIGINT). Its timestamps follow the wall clock.
 - **Avoid `simctl io recordVideo` for timed demos.** It writes a frame only when the screen changes:
   - Long still holds collapse, so the video drifts seconds away from your beat timeline.
   - The first frame is missing until something changes; forcing a change at the start (the status-bar override) only fixes the first frame.
-- **Convert to a constant frame rate before anything else:** `ffmpeg -nostdin -i raw.mp4 -vf "fps=30,scale=-2:1600" -c:v libx264 -crf 18 -pix_fmt yuv420p cfr.mp4`.
+- **Convert to a constant frame rate before anything else:** `ffmpeg -nostdin -y -i raw.mp4 -vf "fps=30,scale=-2:1600" -c:v libx264 -crf 18 -pix_fmt yuv420p cfr.mp4`. Keep `-y`: without it, a re-take's conversion fails because `cfr.mp4` exists, and the old take gets composed. Stop if the conversion exits non-zero.
 - **`-ss` on a variable-frame-rate file returns the next frame, not the current one.** A still screen sampled at 5 s showed a button's pressed state from 10 s, which looked like a disabled button. Sample frames only from the constant-frame-rate file.
 - **Write a beat timeline while driving:** record each beat's start relative to a T0 taken just after recording starts, and after each beat's actions wait until its voice line (plus a short tail) has played.
 - **Check where each screen really appears before cutting.** A toast after sign-in delayed the next screen by 4 s, so its line ("here's the welcome screen") would have played over the old one. Set the beat's start to when the screen appears, not when the action ran.

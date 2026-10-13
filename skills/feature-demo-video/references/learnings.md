@@ -59,6 +59,6 @@ What the first team demos (September 2026) taught us. Read this before planning 
 - Every third-party call the flow makes goes to a local mock, a dev mailer, or is switched off. If you can't isolate one, stop.
 - Never write test data to a live service intending to restore it afterwards. A local test once wrote a fake mapping to a production key-value store and took a live site down for two days; faking the files did not fake the network write.
 - Sharing binds only to the Tailscale address, never `0.0.0.0` or the LAN.
-- **Analytics and crash-reporting SDKs report from dev builds and simulators too.** Point their keys at dummy values for demo builds, or their dashboards fill up with demo sessions.
+- **Analytics and crash-reporting SDKs report from dev builds and simulators too, and a dummy key doesn't stop them:** the event still reaches the vendor's host. Switch the SDKs off for demo builds (a flag the app checks before initializing them) or point their host at a local mock, and check the network log.
 - **Screens behind a real third party** (a card payment, a carrier SMS) are filmed through a temporary preview harness with sample data, never by calling the service. Mark the harness code `TEMP-`, grep for the marker before every commit, and say in the narration that it's sample data.
 - **Throwaway certificates are trusted only where the demo runs** (a simulator's keychain, a test browser profile), never system-wide, and are deleted with the demo.
