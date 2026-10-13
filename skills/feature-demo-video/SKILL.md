@@ -1,19 +1,19 @@
 ---
 name: feature-demo-video
-description: Record a casual "developer shows the team a feature" demo video of any web app running locally — rough first-person voiceover cloned on this Mac (the developer's own voice if they recorded a sample, otherwise a bundled default voice), human-paced browser recording of the real flow on phone and/or desktop, composed to 1080p in light and dark, and optionally shared to a phone over Tailscale. Use when someone asks to "record a demo video of this feature", "show the team" a feature, a "walkthrough video", a "demo video with voiceover", to clone their voice for demos, or to re-take or revise a demo. Not for polished marketing videos or PR screenshots.
+description: Record a casual "developer shows the team a feature" demo video of any web app or native mobile app (iOS simulator) running locally — rough first-person voiceover cloned on this Mac (the developer's own voice if they recorded a sample, otherwise a bundled default voice), human-paced browser recording of the real flow on phone and/or desktop, composed to 1080p in light and dark, and optionally shared to a phone over Tailscale. Use when someone asks to "record a demo video of this feature", "show the team" a feature, a "walkthrough video", a "demo video with voiceover", to clone their voice for demos, or to re-take or revise a demo. Not for polished marketing videos or PR screenshots.
 ---
 
 # Feature demo videos
 
 A developer showing their team a feature they just built: the real app, driven like a person would drive it, with a casual first-person voice over it. Everything runs on this machine: plan → isolated app → voice → record each segment with agent-browser → compose with ffmpeg → share.
 
-Read `references/learnings.md` before planning; it holds the style decisions and every trap the first demos hit. Read `references/voices.md` before generating voice. `examples/catch-up/` is a complete worked example from another app; read it as a pattern.
+Read `references/learnings.md` before planning; it holds the style decisions and every trap the first demos hit. For a native mobile app, also read `references/native-apps.md`: it replaces the browser driving and composing steps with simulator ones. Read `references/voices.md` before generating voice. `examples/catch-up/` is a complete worked example from another app; read it as a pattern.
 
 `S` below is this skill's directory (where this SKILL.md lives). `DEMO_DIR` defaults to `/tmp/feature-demo`; nothing in it is ever committed.
 
 ## Requirements
 
-macOS on Apple Silicon (the voice runs on MLX), Node 22+, Python 3 (on a fresh Mac, `python3` first prompts to install the Xcode Command Line Tools), `ffmpeg`, `uv` (`brew install uv ffmpeg`), and `agent-browser` 0.38+ (`npm i -g agent-browser && agent-browser install`). Tailscale only for sharing. Check these first and tell the user exactly what's missing.
+macOS on Apple Silicon (the voice runs on MLX), Node 22+, Python 3 (on a fresh Mac, `python3` first prompts to install the Xcode Command Line Tools), `ffmpeg`, `uv` (`brew install uv ffmpeg`), and `agent-browser` 0.38+ (`npm i -g agent-browser && agent-browser install`). Tailscale only for sharing. Native iOS apps also need Xcode and [AXe](https://github.com/cameroncooke/AXe) (`brew install cameroncooke/axe/axe`). Check these first and tell the user exactly what's missing.
 
 ## What the video is
 
@@ -143,4 +143,4 @@ The user watches and gives notes. Change `script.json`, re-take only the changed
 - `scripts/lib.mjs` — agent-browser helpers and the take/beat timeline; `cdp.mjs` holds touch emulation; `finger.js` is the fingertip overlay; `ab` wraps agent-browser on the demo session for poking by hand.
 - `scripts/voice-local.mjs` with `voice_clone.py`, `audio.mjs`, `local-voice-env.sh`, `setup-local-voice.sh`, `prepare-voice-sample.sh`; `assets/zubenelgenubi-sample.{wav,txt}` is the default voice.
 - `scripts/make-email.py` — a sent email in a phone mail screen. `scripts/compose.sh` — the finished video. `scripts/serve-share.mjs` — sharing.
-- `templates/driver.mjs` — starting point. `examples/catch-up/` — worked example. `references/learnings.md`, `references/voices.md`.
+- `templates/driver.mjs` — starting point. `examples/catch-up/` — worked example. `references/learnings.md`, `references/voices.md`, `references/native-apps.md` (iOS simulator demos).
