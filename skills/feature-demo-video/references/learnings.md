@@ -38,6 +38,8 @@ What the first team demos (September 2026) taught us. Read this before planning 
 - **Land key actions as a line ends** with `after`: e.g. pressing Post in a confirm sheet as the "it asks you to confirm" line ends (`tail: -0.6`), so the next line starts on the fresh result.
 - Give the viewer a beat on each new screen before the pointer moves; start the pointer where the eye will go next.
 - A typical demo: 14 lines, ~90 s of voice, ~105 s of video (phone ~80 s, desktop ~25 s).
+- **Cut where the screen appears, not where the action ran.** A toast, a spinner or a transition can delay the screen a line talks about by seconds. Pull frames around every beat boundary and move the cut to the first frame of the right screen.
+- **When a recorded action runs longer than its line, speed the segment up** to the line's length plus a short tail rather than leaving silence. Cap it near 2.5×, or the taps and typing look frantic. Up to about 3.5× is fine for stretches that are mostly waiting (sign-in, a spinner).
 
 ## Environment
 
@@ -46,6 +48,10 @@ What the first team demos (September 2026) taught us. Read this before planning 
 - **A fresh checkout may build without its env** and crash on load (e.g. a websocket client with no app key shows as a blank page). Check the browser console when a page is blank.
 - **`ffmpeg -nostdin` everywhere.** Inside a `while read` loop ffmpeg eats the loop's stdin and later segments are silently dropped.
 - An email can be rendered without sending if the flow you're filming doesn't send one; prefer the real sent mail when it does.
+- **A proxy in front of the demo server needs to rewrite the server's own absolute URLs.** Servers build absolute URLs from their own scheme and port, and the client then calls those directly, bypassing the proxy. Rewrite them in responses (plain and JSON-escaped `http:\/\/`), and pass the backend's own `Host` so signed URLs still validate.
+- **Demo the build users get, not the debug build.** Debug-only controls change the layout and don't belong on camera. Build or serve the release-like variant against the demo data.
+- **Check the smallest and the largest screen the product supports** (an iPhone SE at 375×667 is the usual smallest phone) before recording, and the states that add UI: debug panels, admin or log views that a server setting switches on, long names, many items. Layout bugs hide there.
+- Native mobile apps (iOS simulator): read `references/native-apps.md`.
 
 ## Safety
 
@@ -53,3 +59,6 @@ What the first team demos (September 2026) taught us. Read this before planning 
 - Every third-party call the flow makes goes to a local mock, a dev mailer, or is switched off. If you can't isolate one, stop.
 - Never write test data to a live service intending to restore it afterwards. A local test once wrote a fake mapping to a production key-value store and took a live site down for two days; faking the files did not fake the network write.
 - Sharing binds only to the Tailscale address, never `0.0.0.0` or the LAN.
+- **Analytics and crash-reporting SDKs report from dev builds and simulators too, and a dummy key doesn't stop them:** the event still reaches the vendor's host. Switch the SDKs off for demo builds (a flag the app checks before initializing them) or point their host at a local mock, and check the network log.
+- **Screens behind a real third party** (a card payment, a carrier SMS) are filmed through a temporary preview harness with sample data, never by calling the service. Mark the harness code `TEMP-`, grep for the marker before every commit, and say in the narration that it's sample data.
+- **Throwaway certificates are trusted only where the demo runs** (a simulator's keychain, a test browser profile), never system-wide, and are deleted with the demo.

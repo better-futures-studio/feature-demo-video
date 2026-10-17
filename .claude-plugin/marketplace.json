@@ -10,7 +10,7 @@
     {
       "name": "feature-demo-video",
       "source": "./",
-      "description": "Record casual team demo videos of a local web app with a locally cloned voiceover."
+      "description": "Record casual team demo videos of a local web app or iOS simulator app with a locally cloned voiceover."
     }
   ]
 }
